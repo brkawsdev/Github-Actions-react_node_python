@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FaYoutube, FaInstagram, FaLinkedin } from "react-icons/fa";
 import "./App.css"; // Custom CSS file for styling
 
 const App = () => {
-  const [message, setMessage] = useState("");
-
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/message")
       .then((response) => response.json())
       .then((data) => {
-        setMessage(data.message);
+        console.log(data.message);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -19,10 +17,7 @@ const App = () => {
   return (
     <div className="container">
       <header className="header">
-        <h1>
-          Welcome to Harsha Selvi's DevOps Channel!{" "}
-          {message ? message : "Loading message from Flask..."}
-        </h1>
+        <h1>Welcome to Harsha Selvi's DevOps Channel!</h1>
         <p>
           Get the latest DevOps tutorials, tips, and best practices to automate
           your workflow and improve your software development lifecycle.

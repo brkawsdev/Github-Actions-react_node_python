@@ -32,7 +32,7 @@ jobs:
       - name: Publish
         uses: netlify/actions/cli@master
         with:
-            args: deploy --dir=modules/03.Continuous_Delivery/front-end/build
+            args: deploy --dir=modules/03.Continuous_Delivery/front-end/build --prod
         env:
             NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
             NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
