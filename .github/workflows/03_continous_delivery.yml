@@ -37,36 +37,6 @@ jobs:
             NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
             NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
-      - name: Deploy to Netlify
-        uses: jsmrcaga/action-netlify-deploy@v2.0.0
-        with:
-            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-            NETLIFY_DEPLOY_TO_PROD: true
-            build_directory: modules/03.Continuous_Delivery/front-end/
-
-      - name: Install Netlify
-        run: npm install netlify-cli -g
-        working-directory: modules/03.Continuous_Delivery/front-end
-
-      - name: Install Dependencies
-        run: npm ci
-        working-directory: modules/03.Continuous_Delivery/front-end
-
-      - name: Build project
-        run: npm run build
-        working-directory: modules/03.Continuous_Delivery/front-end
-
-      - name: Deploy to Netlify
-        id: netlify_deploy
-        run: |
-          netlify deploy \
-            --dir modules/03.Continuous_Delivery/front-end/build \
-            --site ${{ secrets.NETLIFY_SITE_ID }} \
-            --auth ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        working-directory: modules/03.Continuous_Delivery/front-end
-
-
 #   Deploy Flask Backend to Render
 #   deploy-flask:
 #     runs-on: ubuntu-latest
