@@ -1,4 +1,4 @@
-name: React CI Pipeline with Secrets
+name: 02.React CI Pipeline with Secrets
 
 on:
   push:
