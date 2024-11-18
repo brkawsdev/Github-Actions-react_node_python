@@ -1,0 +1,191 @@
+We will start by creating a simple CI pipeline for a Node.js application. The pipeline will include:
+- Installing dependencies.
+- Running tests with Jest.
+- Linting code with ESLint.
+
+
+Create a Node.js Application
+----------------------------
+mkdir node-ci-demo
+cd node-ci-demo
+npm init -y  # Generates a package.json
+
+
+Install some development dependencies
+-------------------------------------
+npm install jest eslint --save-dev
+
+
+Add a basic test in tests/sample.test.js
+----------------------------------------
+// tests/sample.test.js
+test('adds 1 + 2 to equal 3', () => {
+  expect(1 + 2).toBe(3);
+});
+
+
+Create an ESLint configuration:
+-------------------------------
+npx eslint --init
+
+
+Write the GitHub Actions Workflow
+---------------------------------
+name: Node.js CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]  # Test on different Node.js versions
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Checks out the code from the repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}  # Use Node.js version from matrix
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run Jest tests
+        run: npm test
+
+
+Explanation of the Workflow
+---------------------------
+Triggers (on): This workflow runs on push and pull_request to the main branch.
+Matrix strategy: It tests the code on Node.js versions 14.x, 16.x, and 18.x to ensure compatibility.
+Steps:
+------
+- Checkout: Uses the actions/checkout action to check out your repository’s code.
+- Set up Node.js: Uses the actions/setup-node action to set the Node.js version.
+- Install dependencies: Installs project dependencies with npm install.
+- Run ESLint: Lints the codebase using ESLint (npm run lint).
+- Run tests: Runs the Jest test suite (npm test).
+
+
+Add Commands to package.json
+----------------------------
+Make sure you have the following scripts in your package.json
+"scripts": {
+  "test": "jest",
+  "lint": "eslint ."
+}
+
+
+
+Create a React App
+------------------
+npm init
+npm install create-react-app
+npx create-react-app react-ci-demo
+cd react-ci-demo
+
+
+Write the GitHub Actions Workflow
+---------------------------------
+name: React CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x  # Use Node.js 16.x for React apps
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run React tests
+        run: npm test -- --watchAll=false  # Run React tests in CI mode (without watching files)
+
+      - name: Build React app
+        run: npm run build
+
+
+Explanation of the Workflow
+---------------------------
+This workflow is triggered on push to the main branch.
+After checking out the code and setting up Node.js, it installs the dependencies, runs tests, and builds the React app.
+
+
+Add Commands to package.json
+----------------------------
+Ensure your package.json has the following scripts:
+"scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+}
+
+
+Add Secrets to Your GitHub Repository
+-------------------------------------
+- Go to your repository on GitHub.
+- Click on the Settings tab.
+- In the left sidebar, click Secrets and variables > Actions.
+- Click New repository secret.
+- Add your secret, e.g., API_KEY, DB_PASSWORD, or any other sensitive information.
+
+
+Accessing Secrets in Node.js Workflow
+-------------------------------------
+name: Node.js CI with Secrets
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set environment variables
+        env:
+          NODE_ENV: ${{ secrets.NODE_ENV }}  # Access the NODE_ENV secret
+          API_KEY: ${{ secrets.API_KEY }}    # Access the API_KEY secret
+        run: |
+          echo "Environment is $NODE_ENV"
+          echo "Using API Key: $API_KEY"
+
+      - name: Run tests
+        run: npm test

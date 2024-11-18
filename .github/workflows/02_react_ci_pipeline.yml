@@ -1,0 +1,30 @@
+name: React CI Pipeline with Secrets
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run React tests
+        run: npm test -- --watchAll=false  # Run tests without watching
+
+      - name: Use GitHub Secrets in environment variables
+        env:
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}  # Inject secrets into the build
+        run: npm run build

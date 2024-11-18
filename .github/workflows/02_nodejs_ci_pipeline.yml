@@ -1,0 +1,40 @@
+name: Node.js CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]  # Test on different Node.js versions
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Checks out the code from the repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}  # Use Node.js version from matrix
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Set environment variables
+        env:
+          NODE_ENV: ${{ secrets.NODE_ENV }}  # Access the NODE_ENV secret
+          API_KEY: ${{ secrets.API_KEY }}    # Access the API_KEY secret
+        run: |
+          echo "Environment is $NODE_ENV"
+          echo "Using API Key: $API_KEY"
+
+      - name: Run Jest tests
+        run: npm test

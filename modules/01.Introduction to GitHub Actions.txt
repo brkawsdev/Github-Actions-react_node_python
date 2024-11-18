@@ -1,0 +1,14 @@
+What is GitHub Actions?
+GitHub Actions allows you to automate tasks like testing, building, and deploying code directly from your repository.
+Workflows are defined in YAML files and triggered by specific events, such as pushing code or opening a pull request.
+
+
+The on key specifies the event that triggers the workflow. In this case, it will run when code is pushed to the main branch.
+The jobs section defines a job called say-hello, which runs on an Ubuntu runner (ubuntu-latest).
+The steps section defines the tasks for this job. Here, the only step is to run the command echo "Hello, World!".
+
+After creating the hello-world.yml file, commit and push it to your repository.
+GitHub Actions will automatically detect the workflow and run it on the next push.
+
+You’ve already printed "Hello, World!" using echo. 
+You can run other shell commands or even call scripts stored in your repository.
