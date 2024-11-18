@@ -21,14 +21,6 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: Publish
-        uses: netlify/actions/cli@master
-        with:
-            args: deploy --dir=modules/03.Continuous_Delivery/front-end/build
-        env:
-            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-
       - name: Install dependencies
         run: npm install
         working-directory: modules/03.Continuous_Delivery/front-end
@@ -36,6 +28,14 @@ jobs:
       - name: Build the React app
         run: npm run build
         working-directory: modules/03.Continuous_Delivery/front-end
+
+      - name: Publish
+        uses: netlify/actions/cli@master
+        with:
+            args: deploy --dir=modules/03.Continuous_Delivery/front-end/build
+        env:
+            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
       - name: Deploy to Netlify
         uses: jsmrcaga/action-netlify-deploy@v2.0.0
