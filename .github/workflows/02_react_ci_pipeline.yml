@@ -13,10 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Change directory to Nodejs CI Pipeline
+        run: cd modules/02.React_CI_Pipeline 
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: Install dependencies
         run: npm install

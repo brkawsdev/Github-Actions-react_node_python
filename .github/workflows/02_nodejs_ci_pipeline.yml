@@ -11,11 +11,14 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]  # Test on different Node.js versions
+        node-version: [18.x]  # Test on different Node.js versions
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3  # Checks out the code from the repository
+
+      - name: Change directory to Nodejs CI Pipeline
+        run: cd modules/02.Nodejs_CI_Pipeline 
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
