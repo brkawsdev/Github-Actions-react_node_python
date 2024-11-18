@@ -1,4 +1,4 @@
-name: Deploy to Netlify and Render
+name: 03.Deploy to Netlify and Render
 
 on:
   push:
@@ -29,8 +29,8 @@ jobs:
         run: npm run build
         working-directory: modules/03.Continuous_Delivery/front-end
 
-      - name: Install Netlify CLI
-        run: npm install netlify-cli -g
+    #   - name: Install Netlify CLI
+    #     run: npm install netlify-cli -g
 
       - name: Deploy to Netlify
         uses: netlify/actions/cli@master
@@ -40,7 +40,7 @@ jobs:
             # NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
             NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
-  # Deploy Flask Backend to Render
+#   Deploy Flask Backend to Render
 #   deploy-flask:
 #     runs-on: ubuntu-latest
 #     steps:
