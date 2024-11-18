@@ -1,0 +1,2 @@
+npm install netlify-cli --save-dev
+netlify login
