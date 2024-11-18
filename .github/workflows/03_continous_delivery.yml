@@ -29,16 +29,15 @@ jobs:
         run: npm run build
         working-directory: modules/03.Continuous_Delivery/front-end
 
-    #   - name: Install Netlify CLI
-    #     run: npm install netlify-cli -g
-
       - name: Deploy to Netlify
-        uses: netlify/actions/cli@master
+        uses: nwtgck/actions-netlify@v3.0
         with:
-            args: deploy --dir=modules/03.Continuous_Delivery/front-end/build
+          publish-dir: modules/03.Continuous_Delivery/front-end/dist'
+          deploy-message: "Deploy from GitHub Actions"
         env:
-            # NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        #   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
 
 #   Deploy Flask Backend to Render
 #   deploy-flask:
