@@ -13,9 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Change directory to Nodejs CI Pipeline
-        run: cd modules/02.React_CI_Pipeline 
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -23,11 +20,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: modules/02.React_CI_Pipeline 
 
       - name: Run React tests
         run: npm test -- --watchAll=false  # Run tests without watching
+        working-directory: modules/02.React_CI_Pipeline 
 
       - name: Use GitHub Secrets in environment variables
         env:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}  # Inject secrets into the build
         run: npm run build
+        working-directory: modules/02.React_CI_Pipeline 

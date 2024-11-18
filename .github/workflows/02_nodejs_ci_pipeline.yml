@@ -17,9 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3  # Checks out the code from the repository
 
-      - name: Change directory to Nodejs CI Pipeline
-        run: cd modules/02.Nodejs_CI_Pipeline 
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -27,9 +24,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: modules/02.Nodejs_CI_Pipeline 
 
       - name: Run ESLint
         run: npm run lint
+        working-directory: modules/02.Nodejs_CI_Pipeline 
 
       - name: Set environment variables
         env:
@@ -38,6 +37,8 @@ jobs:
         run: |
           echo "Environment is $NODE_ENV"
           echo "Using API Key: $API_KEY"
+        working-directory: modules/02.Nodejs_CI_Pipeline 
 
       - name: Run Jest tests
         run: npm test
+        working-directory: modules/02.Nodejs_CI_Pipeline 
