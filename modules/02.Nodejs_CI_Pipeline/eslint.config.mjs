@@ -1,18 +1,21 @@
+import eslintPluginReact from "eslint-plugin-react";
+import eslintPluginJest from "eslint-plugin-jest";
+
 export default [
   {
-    files: ["**/*.js", "**/*.mjs"],  // Adjust file types as needed
+    files: ["**/*.js", "**/*.mjs"],
     languageOptions: {
-      ecmaVersion: 2021,  // or whatever version you are using
+      ecmaVersion: 2021,
       sourceType: "module",
     },
     env: {
       browser: true,
       node: true,
-      jest: true,  // Add Jest environment to recognize Jest globals
+      jest: true,
     },
     plugins: {
-      react: require("eslint-plugin-react"),  // Example of react plugin if using React
-      jest: require("eslint-plugin-jest"),    // Optional, if using eslint-plugin-jest
+      react: eslintPluginReact,  // Use imported modules instead of require
+      jest: eslintPluginJest,    // Use imported modules instead of require
     },
     rules: {
       // Your custom rules go here
