@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaYoutube, FaInstagram, FaLinkedin } from "react-icons/fa";
 import "./App.css"; // Custom CSS file for styling
 
 const App = () => {
+  const [url, setUrl] = useState(null);
   useEffect(() => {
     fetch("https://github-actions-course.onrender.com/api/message")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.message);
+        setUrl(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -27,25 +28,13 @@ const App = () => {
       <section className="social-links">
         <h2>Follow Me on:</h2>
         <div className="icons">
-          <a
-            href="https://www.youtube.com/@harshaselvi"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={url?.youtube} target="_blank" rel="noopener noreferrer">
             <FaYoutube className="icon youtube" />
           </a>
-          <a
-            href="https://www.instagram.com/harsha_selvi/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={url?.instagram} target="_blank" rel="noopener noreferrer">
             <FaInstagram className="icon instagram" />
           </a>
-          <a
-            href="https://www.linkedin.com/in/harsha-js/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={url?.linkedin} target="_blank" rel="noopener noreferrer">
             <FaLinkedin className="icon linkedin" />
           </a>
         </div>
