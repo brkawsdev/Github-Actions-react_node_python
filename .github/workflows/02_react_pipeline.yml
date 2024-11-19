@@ -1,0 +1,39 @@
+name: 02.Deploy React to Netlify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: modules/02.React_Pipeline 
+
+      - name: Run React tests
+        run: npm test -- --watchAll=false  # Run tests without watching
+        working-directory: modules/02.React_Pipeline
+
+      - name: Build the React app
+        run: npm run build
+        working-directory: modules/02.React_Pipeline
+
+      - name: Publish
+        uses: netlify/actions/cli@master
+        with:
+            args: deploy --dir=modules/02.React_Pipeline/build --prod
+        env:
+            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
