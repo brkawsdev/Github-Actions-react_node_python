@@ -4,10 +4,17 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/api/message', methods=['GET'])
 def get_message():
-    # Send a sample message to the React frontend
-    return jsonify({'message': 'Hello from Flask Backend!'})
+    return jsonify(
+        {
+            'youtube': 'https://www.youtube.com/@harshaselvi',
+            "instagram": "https://www.instagram.com/harsha_selvi/",
+            "linkedin": "https://www.linkedin.com/in/harsha-js"
+        }
+    )
+
 
 if __name__ == '__main__':
     app.run()
