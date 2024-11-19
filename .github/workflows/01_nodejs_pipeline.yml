@@ -1,4 +1,4 @@
-name: 02.Node.js CI Pipeline
+name: 01.Node.js Pipeline
 
 on:
   push:
@@ -20,12 +20,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: modules/02.Nodejs_Pipeline 
+        working-directory: modules/01.Nodejs_Pipeline 
 
       - name: Run ESLint
         run: npm run lint
-        working-directory: modules/02.Nodejs_Pipeline 
+        working-directory: modules/01.Nodejs_Pipeline 
 
       - name: Run Jest tests
         run: npm test
-        working-directory: modules/02.Nodejs_CI_Pipeline 
+        working-directory: modules/01.Nodejs_Pipeline 
