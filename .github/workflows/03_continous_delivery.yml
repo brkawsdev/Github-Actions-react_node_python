@@ -38,30 +38,30 @@ jobs:
             NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
 #   Deploy Flask Backend to Render
-#   deploy-flask:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
+  deploy-flask:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-#       - name: Set up Python
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: '3.9'
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
 
-#       - name: Install dependencies
-#         run: |
-#           python -m venv venv
-#           source venv/bin/activate
-#           pip install -r requirements.txt
-#         working-directory: modules/03.Continuous_Delivery/back-end
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+        working-directory: modules/03.Continuous_Delivery/back-end
 
-#       - name: Deploy to Render
-#         env:
-#           RENDER_API_TOKEN: ${{ secrets.RENDER_API_TOKEN }}
-#           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-#         run: |
-#           curl -X POST https://api.render.com/v1/services/$RENDER_SERVICE_ID/deployments \
-#           -H "Authorization: Bearer $RENDER_API_TOKEN"
-#         working-directory: modules/03.Continuous_Delivery/back-end
+      - name: Deploy to Render
+        env:
+          RENDER_API_TOKEN: ${{ secrets.RENDER_API_TOKEN }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        run: |
+          curl -X POST https://api.render.com/v1/services/$RENDER_SERVICE_ID/deployments \
+          -H "Authorization: Bearer $RENDER_API_TOKEN"
+        working-directory: modules/03.Continuous_Delivery/back-end
           
