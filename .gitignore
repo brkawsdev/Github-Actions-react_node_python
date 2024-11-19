@@ -1,3 +1,4 @@
 modules/02.Nodejs_CI_Pipeline/node_modules
 modules/02.React_CI_Pipeline/node_modules
 modules/03.Continuous_Delivery/front-end/node_modules
+modules/03.Continuous_Delivery/back-end/env
