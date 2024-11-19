@@ -1,3 +1,0 @@
-[build]
-builder= "DOCKERFILE"
-dockerfilepath="/modules/01.Nodejs_Pipeline/Dockerfile
