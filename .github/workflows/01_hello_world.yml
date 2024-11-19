@@ -4,7 +4,7 @@ name: 01.Hello World Workflow
 on:
   push:
     branches:
-      - main # Runs only when code is pushed to the main branch
+      - dev # change to main to run
 
 # Define the jobs (tasks) that will run
 jobs:

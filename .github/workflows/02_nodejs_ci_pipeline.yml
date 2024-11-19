@@ -3,7 +3,7 @@ name: 02.Node.js CI Pipeline
 on:
   push:
     branches:
-      - main
+      - dev # change to main to run
 
 jobs:
   build:
