@@ -39,7 +39,7 @@ jobs:
       - name: Publish to Netlify
         uses: netlify/actions/cli@master
         with:
-          args: deploy --dir=modules/02.React_Pipeline/build --prod
+          args: deploy a--dir=modules/02.React_Pipeline/build --prod
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -47,6 +47,7 @@ jobs:
         id: deploy-to-netlify      
         
       - name: Slack Notification
+        if: always() 
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: github-action-course 
