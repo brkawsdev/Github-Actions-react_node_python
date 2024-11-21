@@ -3,7 +3,7 @@ name: 01.Node.js Pipeline
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   build:
@@ -101,6 +101,13 @@ jobs:
             echo "✅ Railway CLI installed successfully!"
           else
             echo "❌ Railway CLI installation failed!"
+            exit 1
+          fi
+
+          if [ ${{ steps.railway-cli-login.outcome }} == 'success' ]; then
+            echo "✅ Successfully logged into Railway!"
+          else
+            echo "❌ Failed to log into Railway!"
             exit 1
           fi
 
