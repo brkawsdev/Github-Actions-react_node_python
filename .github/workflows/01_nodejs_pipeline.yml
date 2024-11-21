@@ -46,8 +46,14 @@ jobs:
         continue-on-error: false
         id: install-railway-cli
 
-      - name: Railway Login (Authenticate with Railway API Token)
-        run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+       # Railway Login via GraphQL API using curl
+      - name: Railway Login (Authenticate using API Token)
+        run: |
+          curl --request POST \
+            --url https://backboard.railway.com/graphql/v2 \
+            --header 'Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data '{"query":"query { me { name email } }"}'
         continue-on-error: false
         id: railway-login
 
