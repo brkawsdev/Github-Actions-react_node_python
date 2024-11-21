@@ -60,6 +60,7 @@ jobs:
 
       # Success/Failure message after key steps
       - name: Check Success/Failure Messages
+        if: always()  
         run: |
           if [ ${{ steps.install-dependencies.outcome }} == 'success' ]; then
             echo "✅ Dependencies installed successfully!"
