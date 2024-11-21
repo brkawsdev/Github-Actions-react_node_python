@@ -3,7 +3,7 @@ name: 02.Deploy React to Netlify
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   build:
@@ -31,7 +31,7 @@ jobs:
         id: run-tests
 
       - name: Build the React app
-        run: npm run builds
+        run: npm run build
         working-directory: modules/02.React_Pipeline
         continue-on-error: false
         id: build-app
