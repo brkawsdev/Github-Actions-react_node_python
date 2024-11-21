@@ -31,7 +31,7 @@ jobs:
         id: run-tests
 
       - name: Build the React app
-        run: npm run build
+        run: npm run builds
         working-directory: modules/02.React_Pipeline
         continue-on-error: false
         id: build-app
@@ -39,7 +39,7 @@ jobs:
       - name: Publish to Netlify
         uses: netlify/actions/cli@master
         with:
-          args: deploy --dir=modules/02.React_Pipeline/ build --prod
+          args: deploy --dir=modules/02.React_Pipeline/build --prod
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

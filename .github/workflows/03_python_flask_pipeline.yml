@@ -40,28 +40,34 @@ jobs:
         continue-on-error: false
         id: deploy-render
 
-      # Success/Failure message after key steps
-      - name: Check Success/Failure Messages
+      - name: Teams Notification
         if: always()  
         run: |
-          if [ ${{ steps.install-dependencies.outcome }} == 'success' ]; then
-            echo "✅ Dependencies installed successfully!"
+          status="${{ job.status }}"
+          if [ "${status}" == "success" ]; then
+            COLOR="#00FF00" # Green for success
           else
-            echo "❌ Failed to install dependencies!"
-            exit 1
+            COLOR="#FF0000" # Red for failure
           fi
-          
-          if [ ${{ steps.run-flake8.outcome }} == 'success' ]; then
-            echo "✅ Flake8 linting passed!"
-          else
-            echo "❌ Flake8 linting failed!"
-            exit 1
-          fi
-          
-          if [ ${{ steps.deploy-render.outcome }} == 'success' ]; then
-            echo "✅ Successfully triggered Render deployment!"
-          else
-            echo "❌ Failed to trigger Render deployment!"
-            exit 1
-          fi
-        continue-on-error: false
+
+          # Prepare the message for Teams
+          curl -H 'Content-Type: application/json' \
+               -d '{
+                    "title": "Flask App Deployment Status",
+                    "text": "Deployment to Render triggered by '${{ github.actor }}' on branch '${{ github.ref_name }}' has completed.",
+                    "sections": [{
+                      "activityTitle": "Deployment Status: '${{ job.status }}'",
+                      "facts": [
+                        {"name": "Deployed by", "value": "'${{ github.actor }}'"},
+                        {"name": "Branch", "value": "'${{ github.ref_name }}'"},
+                        {"name": "Commit Message", "value": "'${{ github.event.head_commit.message }}'"},
+                        {"name": "Commit SHA", "value": "'${{ github.sha }}'"},
+                        {"name": "Repository", "value": "'${{ github.repository }}'"},
+                        {"name": "Job Status", "value": "'${{ job.status }}'"},
+                        {"name": "Workflow Run ID", "value": "'${{ github.run_id }}'"},
+                        {"name": "Workflow URL", "value": "'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'"} 
+                      ]
+                    }],
+                    "themeColor": "'${COLOR}'"
+                  }' \
+               ${{ secrets.TEAMS_WEBHOOK_URL }}
