@@ -6,10 +6,30 @@ on:
       - main
 
 jobs:
-  #   Deploy Flask Backend to Render
   deploy-flask:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+        continue-on-error: false
+        id: install-dependencies
+
+      - name: Run Flake8 Linting
+        run: flake8 .
+        continue-on-error: false
+        id: run-flake8
+
       - name: Trigger Render deployment
         run: |
           curl --request POST \
@@ -17,3 +37,29 @@ jobs:
                --header 'accept: application/json' \
                --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
                --header 'content-type: application/json'
+        continue-on-error: false
+        id: deploy-render
+
+      # Success/Failure message after key steps
+      - name: Check Success/Failure Messages
+        run: |
+          if [ ${{ steps.install-dependencies.outcome }} == 'success' ]; then
+            echo "✅ Dependencies installed successfully!"
+          else
+            echo "❌ Failed to install dependencies!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.run-flake8.outcome }} == 'success' ]; then
+            echo "✅ Flake8 linting passed!"
+          else
+            echo "❌ Flake8 linting failed!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.deploy-render.outcome }} == 'success' ]; then
+            echo "✅ Successfully triggered Render deployment!"
+          else
+            echo "❌ Failed to trigger Render deployment!"
+            exit 1
+        continue-on-error: false

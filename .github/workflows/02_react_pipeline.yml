@@ -20,20 +20,60 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: modules/02.React_Pipeline 
+        working-directory: modules/02.React_Pipeline
+        continue-on-error: false
+        id: install-dependencies
 
       - name: Run React tests
-        run: npm test -- --watchAll=false  # Run tests without watching
+        run: npm test -- --watchAll=false
         working-directory: modules/02.React_Pipeline
+        continue-on-error: false
+        id: run-tests
 
       - name: Build the React app
         run: npm run build
         working-directory: modules/02.React_Pipeline
+        continue-on-error: false
+        id: build-app
 
-      - name: Publish
+      - name: Publish to Netlify
         uses: netlify/actions/cli@master
         with:
-            args: deploy --dir=modules/02.React_Pipeline/build --prod
+          args: deploy --dir=modules/02.React_Pipeline/build --prod
         env:
-            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        continue-on-error: false
+        id: deploy-to-netlify
+
+      # Success/Failure message after key steps
+      - name: Check Success/Failure Messages
+        run: |
+          if [ ${{ steps.install-dependencies.outcome }} == 'success' ]; then
+            echo "✅ Dependencies installed successfully!"
+          else
+            echo "❌ Failed to install dependencies!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.run-tests.outcome }} == 'success' ]; then
+            echo "✅ React tests passed!"
+          else
+            echo "❌ React tests failed!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.build-app.outcome }} == 'success' ]; then
+            echo "✅ React app built successfully!"
+          else
+            echo "❌ React build failed!"
+            exit 1
+          fi
+
+          if [ ${{ steps.deploy-to-netlify.outcome }} == 'success' ]; then
+            echo "✅ Successfully deployed to Netlify!"
+          else
+            echo "❌ Deployment to Netlify failed!"
+            exit 1
+          fi
+        continue-on-error: false

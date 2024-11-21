@@ -18,28 +18,95 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Install dependencies
+      - name: Install dependencies with npm
         run: npm install
-        working-directory: modules/01.Nodejs_Pipeline 
+        working-directory: modules/01.Nodejs_Pipeline
+        continue-on-error: false
+        id: install-dependencies
 
       - name: Run ESLint
         run: npm run lint
-        working-directory: modules/01.Nodejs_Pipeline 
+        working-directory: modules/01.Nodejs_Pipeline
+        continue-on-error: false
+        id: run-eslint
 
       - name: Run Jest tests
         run: npm test
-        working-directory: modules/01.Nodejs_Pipeline 
+        working-directory: modules/01.Nodejs_Pipeline
+        continue-on-error: false
+        id: run-tests
 
-      - name: Install packages
+      - name: Install packages with yarn
         run: yarn install --frozen-lockfile
+        continue-on-error: false
+        id: install-yarn
 
-      - name: Install Railway
+      - name: Install Railway CLI
         run: npm i -g @railway/cli
+        continue-on-error: false
+        id: install-railway-cli
 
       - name: Link Railway project
-        run: railway link -p 36f229f1-ddc8-447b-84c3-af1f5d431611
+        run: railway link -p ${{ secrets.RAILWAY_PROJECT_ID }}
+        continue-on-error: false
+        id: link-railway
 
-      - name: Deploy
+      - name: Deploy to Railway
         run: railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        continue-on-error: false
+        id: deploy-to-railway
+
+      # Success/Failure message after key steps
+      - name: Check Success/Failure Messages
+        run: |
+          if [ ${{ steps.install-dependencies.outcome }} == 'success' ]; then
+            echo "✅ Dependencies installed successfully!"
+          else
+            echo "❌ Failed to install dependencies!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.run-eslint.outcome }} == 'success' ]; then
+            echo "✅ ESLint passed!"
+          else
+            echo "❌ ESLint failed!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.run-tests.outcome }} == 'success' ]; then
+            echo "✅ Jest tests passed!"
+          else
+            echo "❌ Jest tests failed!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.install-yarn.outcome }} == 'success' ]; then
+            echo "✅ Yarn dependencies installed successfully!"
+          else
+            echo "❌ Failed to install Yarn dependencies!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.install-railway-cli.outcome }} == 'success' ]; then
+            echo "✅ Railway CLI installed successfully!"
+          else
+            echo "❌ Railway CLI installation failed!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.link-railway.outcome }} == 'success' ]; then
+            echo "✅ Railway project linked successfully!"
+          else
+            echo "❌ Failed to link Railway project!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.deploy-to-railway.outcome }} == 'success' ]; then
+            echo "✅ Successfully deployed to Railway!"
+          else
+            echo "❌ Deployment to Railway failed!"
+            exit 1
+          fi
+        continue-on-error: false
