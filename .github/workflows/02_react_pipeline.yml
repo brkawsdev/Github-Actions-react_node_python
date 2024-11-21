@@ -44,15 +44,22 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         continue-on-error: false
-        id: deploy-to-netlify
+        id: deploy-to-netlify      
         
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_CHANNEL: general
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_MESSAGE: 'Post Content :rocket:'
-          SLACK_TITLE: Post Title
-          SLACK_USERNAME: rtCamp
+          SLACK_CHANNEL: github-action-course  # Channel to send notification to
+          SLACK_COLOR: ${{ job.status }}       # Color indicator based on job status
+          SLACK_ICON: https://github.com/rtCamp.png?size=48  # Custom icon URL
+          SLACK_ICON_EMOJI: ":rocket:"         # Emoji for the Slack message icon
+          SLACK_USERNAME: "GitHub Actions Bot" # Displayed username in Slack
+          SLACK_TITLE: "React CI/CD Deployment Status"  # Title of the Slack message
+          SLACK_MESSAGE: |
+            *Deployed by*: ${{ github.actor }}
+            *Branch*: ${{ github.ref_name }}
+            *Commit Message*: ${{ github.event.head_commit.message }}
+            *Commit SHA*: ${{ github.sha }}
+            *Deployment Time*: ${{ steps.deploy-to-netlify.outputs.timestamp }}
+            *Status*: ${{ job.status }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
