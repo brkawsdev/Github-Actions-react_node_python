@@ -3,7 +3,7 @@ name: 02.Deploy React to Netlify
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   build:
@@ -45,36 +45,55 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         continue-on-error: false
         id: deploy-to-netlify
-
-      # Success/Failure message after key steps
-      - name: Check Success/Failure Messages
-        if: always()  
-        run: |
-          if [ ${{ steps.install-dependencies.outcome }} == 'success' ]; then
-            echo "✅ Dependencies installed successfully!"
-          else
-            echo "❌ Failed to install dependencies!"
-            exit 1
-          fi
-          
-          if [ ${{ steps.run-tests.outcome }} == 'success' ]; then
-            echo "✅ React tests passed!"
-          else
-            echo "❌ React tests failed!"
-            exit 1
-          fi
-          
-          if [ ${{ steps.build-app.outcome }} == 'success' ]; then
-            echo "✅ React app built successfully!"
-          else
-            echo "❌ React build failed!"
-            exit 1
-          fi
-
-          if [ ${{ steps.deploy-to-netlify.outcome }} == 'success' ]; then
-            echo "✅ Successfully deployed to Netlify!"
-          else
-            echo "❌ Deployment to Netlify failed!"
-            exit 1
-          fi
-        continue-on-error: false
+        
+        # Send a Slack notification with detailed deployment info
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+              "channel": "#github-action-course",
+              "username": "GitHub Actions",
+              "text": ":rocket: *React CI/CD Pipeline Results* :rocket:",
+              "attachments": [
+                {
+                  "color": "#36a64f",
+                  "fields": [
+                    {
+                      "title": "Status",
+                      "value": "${{ job.status }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Deployed by",
+                      "value": "${{ github.actor }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Branch",
+                      "value": "${{ github.ref_name }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Commit Message",
+                      "value": "${{ github.event.head_commit.message }}",
+                      "short": false
+                    },
+                    {
+                      "title": "Commit SHA",
+                      "value": "${{ github.sha }}",
+                      "short": false
+                    },
+                    {
+                      "title": "Deployment Time",
+                      "value": "${{ steps.deploy-to-netlify.timestamp }}",
+                      "short": true
+                    }
+                  ],
+                  "footer": "GitHub Actions",
+                  "ts": "{{ steps.deploy-to-netlify.timestamp }}"
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
