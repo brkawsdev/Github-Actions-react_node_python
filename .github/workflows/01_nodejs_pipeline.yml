@@ -41,28 +41,8 @@ jobs:
         continue-on-error: false
         id: install-railway-cli
         
-      - name: Install Railway
-        run: npm i -g @railway/cli
-
-      - name: Deploy
-        run: railway up --service Github-Actions-Course
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
-        # Login the Railway CLI
-      - name: Login Railway CLI
-        run: |
-          echo "${{ secrets.RAILWAY_TOKEN }}" | railway login --token
-        continue-on-error: false
-        id: railway-cli-login
-
-      - name: Link Railway project
-        run: railway link -p ${{ secrets.RAILWAY_PROJECT_ID }}
-        continue-on-error: false
-        id: link-railway
-
       - name: Deploy to Railway
-        run: railway up
+        run: railway up --service Github-Actions-Course
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         continue-on-error: false
@@ -93,31 +73,10 @@ jobs:
             exit 1
           fi
 
-          if [ ${{ steps.install-yarn.outcome }} == 'success' ]; then
-            echo "✅ Yarn dependencies installed successfully!"
-          else
-            echo "❌ Failed to install Yarn dependencies!"
-            exit 1
-          fi
-
           if [ ${{ steps.install-railway-cli.outcome }} == 'success' ]; then
             echo "✅ Railway CLI installed successfully!"
           else
             echo "❌ Railway CLI installation failed!"
-            exit 1
-          fi
-
-          if [ ${{ steps.railway-cli-login.outcome }} == 'success' ]; then
-            echo "✅ Successfully logged into Railway!"
-          else
-            echo "❌ Failed to log into Railway!"
-            exit 1
-          fi
-
-          if [ ${{ steps.link-railway.outcome }} == 'success' ]; then
-            echo "✅ Railway project linked successfully!"
-          else
-            echo "❌ Failed to link Railway project!"
             exit 1
           fi
 
