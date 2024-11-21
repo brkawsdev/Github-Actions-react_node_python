@@ -60,6 +60,11 @@ jobs:
             *Branch*: ${{ github.ref_name }}
             *Commit Message*: ${{ github.event.head_commit.message }}
             *Commit SHA*: ${{ github.sha }}
-            *Deployment Time*: ${{ steps.deploy-to-netlify.outputs.timestamp }}
+            *Commit URL*: ${{ github.event.head_commit.url }}
+            *Commit Author*: ${{ github.event.head_commit.author.name }}
+            *Commit Timestamp*: ${{ github.event.head_commit.timestamp }}
+            *Workflow Run ID*: ${{ github.run_id }}
+            *Workflow URL*: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            *Repository*: ${{ github.repository }}
             *Status*: ${{ job.status }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
