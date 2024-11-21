@@ -45,53 +45,61 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         continue-on-error: false
         id: deploy-to-netlify
-        
-        # Send a Slack notification with detailed deployment info
-      - name: Send Slack Notification
-        uses: slackapi/slack-github-action@v1.23.0
+
+      - name: Slack Notification
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           payload: |
             {
               "channel": "#github-action-course",
               "username": "GitHub Actions",
               "text": ":rocket: *React CI/CD Pipeline Results* :rocket:",
-              "attachments": [
+              "blocks": [
                 {
-                  "color": "#36a64f",
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":rocket: React CI/CD Pipeline Results :rocket:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
                   "fields": [
                     {
-                      "title": "Status",
-                      "value": "${{ job.status }}",
-                      "short": true
+                      "type": "mrkdwn",
+                      "text": "*Status:*\n${{ job.status }}"
                     },
                     {
-                      "title": "Deployed by",
-                      "value": "${{ github.actor }}",
-                      "short": true
+                      "type": "mrkdwn",
+                      "text": "*Deployed by:*\n${{ github.actor }}"
                     },
                     {
-                      "title": "Branch",
-                      "value": "${{ github.ref_name }}",
-                      "short": true
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n${{ github.ref_name }}"
                     },
                     {
-                      "title": "Commit Message",
-                      "value": "${{ github.event.head_commit.message }}",
-                      "short": false
+                      "type": "mrkdwn",
+                      "text": "*Commit Message:*\n${{ github.event.head_commit.message }}"
                     },
                     {
-                      "title": "Commit SHA",
-                      "value": "${{ github.sha }}",
-                      "short": false
+                      "type": "mrkdwn",
+                      "text": "*Commit SHA:*\n${{ github.sha }}"
                     },
                     {
-                      "title": "Deployment Time",
-                      "value": "${{ steps.deploy-to-netlify.timestamp }}",
-                      "short": true
+                      "type": "mrkdwn",
+                      "text": "*Deployment Time:*\n<!date^${{ steps.deploy-to-netlify.timestamp }}^{date_short_pretty} at {time}|Unknown time>"
                     }
-                  ],
-                  "footer": "GitHub Actions",
-                  "ts": "{{ steps.deploy-to-netlify.timestamp }}"
+                  ]
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "Powered by GitHub Actions :rocket:"
+                    }
+                  ]
                 }
               ]
             }
