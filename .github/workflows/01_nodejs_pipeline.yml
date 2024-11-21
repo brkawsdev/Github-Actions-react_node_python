@@ -46,6 +46,11 @@ jobs:
         continue-on-error: false
         id: install-railway-cli
 
+      - name: Railway Login (Authenticate with Railway API Token)
+        run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+        continue-on-error: false
+        id: railway-login
+
       - name: Link Railway project
         run: railway link -p ${{ secrets.RAILWAY_PROJECT_ID }}
         continue-on-error: false
@@ -94,6 +99,13 @@ jobs:
             echo "✅ Railway CLI installed successfully!"
           else
             echo "❌ Railway CLI installation failed!"
+            exit 1
+          fi
+          
+          if [ ${{ steps.railway-login.outcome }} == 'success' ]; then
+            echo "✅ Successfully logged into Railway!"
+          else
+            echo "❌ Failed to log into Railway!"
             exit 1
           fi
           
