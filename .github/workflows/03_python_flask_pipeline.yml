@@ -6,12 +6,14 @@ on:
       - main
 
 jobs:
-#   Deploy Flask Backend to Render
+  #   Deploy Flask Backend to Render
   deploy-flask:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Render
-        uses: johnbeynon/render-deploy-action@v0.0.8
-        with:
-          service-id: ${{ secrets.RENDER_SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
+      - name: Trigger Render deployment
+        run: |
+          curl --request POST \
+               --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
+               --header 'accept: application/json' \
+               --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
+               --header 'content-type: application/json'
