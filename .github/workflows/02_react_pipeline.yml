@@ -49,59 +49,12 @@ jobs:
       - name: Slack Notification
         uses: slackapi/slack-github-action@v2.0.0
         with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
           payload: |
-            {
-              "channel": "#github-action-course",
-              "username": "GitHub Actions",
-              "text": ":rocket: *React CI/CD Pipeline Results* :rocket:",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":rocket: React CI/CD Pipeline Results :rocket:",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Status:*\n${{ job.status }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Deployed by:*\n${{ github.actor }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch:*\n${{ github.ref_name }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Commit Message:*\n${{ github.event.head_commit.message }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Commit SHA:*\n${{ github.sha }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Deployment Time:*\n<!date^${{ steps.deploy-to-netlify.timestamp }}^{date_short_pretty} at {time}|Unknown time>"
-                    }
-                  ]
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "Powered by GitHub Actions :rocket:"
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            text: "*GitHub Action build result*: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+            blocks:
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
