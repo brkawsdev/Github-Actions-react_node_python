@@ -3,7 +3,7 @@ name: 01.Node.js Pipeline
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   build:
@@ -36,15 +36,18 @@ jobs:
         continue-on-error: false
         id: run-tests
 
-      - name: Install packages with yarn
-        run: yarn install --frozen-lockfile
-        continue-on-error: false
-        id: install-yarn
-
       - name: Install Railway CLI
         run: npm i -g @railway/cli
         continue-on-error: false
         id: install-railway-cli
+        
+      - name: Install Railway
+        run: npm i -g @railway/cli
+
+      - name: Deploy
+        run: railway up
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
         # Login the Railway CLI
       - name: Login Railway CLI
