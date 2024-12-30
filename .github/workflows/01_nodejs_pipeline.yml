@@ -1,4 +1,4 @@
-name: 01.Node.js Pipeline
+name: 01.Node.js Pipeline.
 
 on:
   push:
