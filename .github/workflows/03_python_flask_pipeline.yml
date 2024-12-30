@@ -1,4 +1,4 @@
-name: 03.Deploy Flask to Render
+name: 03.Deploy Flask to Render.
 
 on:
   push:
