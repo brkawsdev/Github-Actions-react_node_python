@@ -1,4 +1,4 @@
-name: 02.Deploy React to Netlify
+name: 02.Deploy React to Netlify.
 
 on:
   push:
